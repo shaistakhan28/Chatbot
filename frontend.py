@@ -1,4 +1,3 @@
-
 import streamlit as st
 import backend as bk
 
@@ -11,8 +10,9 @@ if "conversations" not in st.session_state:
 if "active_chat" not in st.session_state:
     st.session_state.active_chat = "Chat 1"
     st.session_state.conversations["Chat 1"] = []
+    
 
-
+    
 
 st.sidebar.header("💬 Chat History")
 
@@ -26,6 +26,7 @@ selected_chat = st.sidebar.selectbox(
 
 st.session_state.active_chat = selected_chat
 
+
 if st.sidebar.button("➕ New Chat"):
     new_name = f"Chat {len(chat_names) + 1}"
     st.session_state.conversations[new_name] = []
@@ -33,11 +34,14 @@ if st.sidebar.button("➕ New Chat"):
     st.rerun()
 
 
+
 history = st.session_state.conversations[st.session_state.active_chat]
+
 
 for msg in history:
     with st.chat_message("user" if msg["role"] == "USER" else "assistant"):
         st.write(msg["message"])
+        
 
 
 if prompt := st.chat_input("Type your message..."):
@@ -46,13 +50,12 @@ if prompt := st.chat_input("Type your message..."):
     with st.chat_message("user"):
         st.write(prompt)
 
-   
     try:
         bot_response = bk.get_text_output(history, prompt)
     except Exception as e:
         bot_response = f"⚠️ Error: {e}"
 
-   
+
     history.append({"role": "CHATBOT", "message": bot_response})
     with st.chat_message("assistant"):
         st.write(bot_response)
@@ -61,4 +64,10 @@ if prompt := st.chat_input("Type your message..."):
 
     
     
+
+
+
+    
+    
+
 
